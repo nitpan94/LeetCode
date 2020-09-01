@@ -1,0 +1,31 @@
+public class Solution extends Reader4 {
+    /**
+     * @param buf Destination buffer
+     * @param n   Number of characters to read
+     * @return    The number of actual characters read     
+     */
+    private char[] buffer=new char[4];
+    private int offset=0;
+    private int charactersInBuffer=0;
+    public int read(char[] buf, int n) {
+        int charactersRead=0;
+        boolean eof=false;
+        while(!eof && charactersRead<n){
+            if(charactersInBuffer==0)
+            {
+                charactersInBuffer=read4(buffer);
+                eof=charactersInBuffer<4;                
+            }
+            int numCharacter=Math.min(charactersInBuffer,n-charactersRead);
+            for(int i=0;i<numCharacter;i++)
+            {
+                buf[charactersRead+i]=buffer[offset+i];
+                
+            }
+            charactersRead+=numCharacter;
+            charactersInBuffer-=numCharacter;
+            offset=(offset+numCharacter)%4;
+        }
+     return  charactersRead;
+    }
+}
